@@ -1,5 +1,6 @@
+using System.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Services.DTO;
 using Services.Interfaces;
 
@@ -7,6 +8,7 @@ namespace EmployeeEngagementsApp.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+//[Authorize]
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -92,5 +94,6 @@ public class UserController : ControllerBase
 
         return Ok();
     }
+
 }
 

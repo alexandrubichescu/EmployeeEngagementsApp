@@ -1,5 +1,4 @@
-﻿using System.Reflection.Emit;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Repository.Models;
 
@@ -25,9 +24,6 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         user.Property(u => u.Role)
             .IsRequired();
 
-        user.Property(u => u.Password)
-            .IsRequired();
-
         user.Property(u => u.Points)
             .IsRequired();
 
@@ -42,8 +38,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 LastName = "Doe",
                 Email = "johndoe@example.com",
                 Role = "Admin",
-                Password = "password",
-                Points = 0
+                Points = 0,
+                Password = "password"
             },
             new User {
                 Id = 2,
@@ -51,8 +47,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 LastName = "Smith",
                 Email = "janesmith@example.com",
                 Role = "User",
-                Password = "password",
-                Points = 0
+                Points = 0,
+                Password = "password"
             },
             new User {
                 Id = 3,
@@ -60,8 +56,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 LastName = "Johnson",
                 Email = "markjohnson@example.com",
                 Role = "User",
-                Password = "password",
-                Points = 0
+                Points = 0,
+                Password = "password"
             },
             new User {
                 Id = 4,
@@ -69,8 +65,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 LastName = "Lee",
                 Email = "sarahlee@example.com",
                 Role = "User",
-                Password = "password",
-                Points = 0
+                Points = 0,
+                Password = "password"
             }
         );
     }

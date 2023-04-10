@@ -1,4 +1,5 @@
-﻿
+﻿using System.Text.Json.Serialization;
+
 namespace Repository.Models;
 
 public class User
@@ -8,7 +9,10 @@ public class User
     public string LastName { get; set; } = default!;
     public string Email { get; set; } = default!;
     public string Role { get; set; } = default!;
+
+    [JsonIgnore]
     public string Password { get; set; } = default!;
+
 
     /// <summary>
     /// User points
@@ -19,4 +23,9 @@ public class User
     /// User Won badges
     /// </summary>
     public List<Badge>? Badges { get; set; }
+
+    /// <summary>
+    /// User complete quests
+    /// </summary>
+    //public List<Quest>? Quests { get; set; }
 }

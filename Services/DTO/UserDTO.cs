@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Services.DTO;
 
 public class UserDTO
@@ -9,7 +7,6 @@ public class UserDTO
     public string LastName { get; set; } = default!;
     public string Email { get; set; } = default!;
     public string Role { get; set; } = default!;
-    public string Password { get; set; } = default!;
 
     /// <summary>
     /// User points

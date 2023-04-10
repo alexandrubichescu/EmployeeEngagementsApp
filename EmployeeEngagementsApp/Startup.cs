@@ -1,9 +1,8 @@
-using System.Reflection;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Repository.Implementations;
 using Repository.Interfaces;
+using Services.Auth;
 using Services.Implementations;
 using Services.Interfaces;
 using Services.Mappers;
@@ -22,6 +21,8 @@ public class StartUp
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddControllers();
+        
+        
 
         // Add Entity Framework Core
         services.AddDbContext<BlueDbContext>(options =>
@@ -29,7 +30,12 @@ public class StartUp
 
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IBadgeRepository, BadgeRepository>();
+        services.AddScoped<IQuestRepository, QuestRepository>();
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IQuestService, QuestService>();
+
+        services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
+
 
         services.AddAutoMapper(typeof(MappingProfile));
 
@@ -58,7 +64,12 @@ public class StartUp
 
         app.UseRouting();
 
+        app.UseAuthentication();
+
         app.UseAuthorization();
+
+        // custom jwt auth middleware
+        app.UseMiddleware<JwtMiddleware>();
 
         app.UseEndpoints(endpoints =>
         {

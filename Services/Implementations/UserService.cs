@@ -1,7 +1,13 @@
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Repository.Interfaces;
 using Repository.Models;
+using Services.Auth;
 using Services.DTO;
 using Services.Interfaces;
 
@@ -12,13 +18,17 @@ public class UserService : IUserService
     private readonly IMapper _mapper;
     private readonly IUserRepository _userRepository;
     private readonly IBadgeRepository _badgeRepository;
+    private readonly AppSettings _appSettings;
 
-    public UserService(IMapper mapper, IUserRepository userRepository, IBadgeRepository badgeRepository)
+    public UserService(IMapper mapper, IUserRepository userRepository,
+        IBadgeRepository badgeRepository, IOptions<AppSettings> appSettings)
     {
         _mapper = mapper;
         _userRepository = userRepository;
         _badgeRepository = badgeRepository;
+        _appSettings = appSettings.Value;
     }
+
 
     public async Task<int> AddUserAsync(UserDTO UserDTO)
     {
@@ -86,4 +96,36 @@ public class UserService : IUserService
         }
         return false;
     }
+    public async Task<AuthenticateResponse> Authenticate(AuthenticateRequest model)
+    {
+        var user = await _userRepository.GetUserByEmailAndPassword(model.Email, model.Password);
+
+        // return null if user not found
+        if (user == null)
+            throw new Exception("User not found");
+
+        // authentication successful so generate jwt token
+        var token = generateJwtToken(user);
+
+        return new AuthenticateResponse(user, token);
+    }
+
+
+
+    private string generateJwtToken(User user)
+    {
+        // generate token that is valid for 7 days
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
+            Expires = DateTime.UtcNow.AddDays(7),
+            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+        };
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+        return tokenHandler.WriteToken(token);
+    }
+
+
 }

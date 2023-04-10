@@ -8,6 +8,9 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<User, UserDTO>();
+        CreateMap<User, UserDTO>().ReverseMap();
+        CreateMap<Quest, QuestDTO>().ReverseMap();
+
+       ;
     }
 }

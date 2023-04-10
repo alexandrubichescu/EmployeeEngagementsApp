@@ -1,5 +1,4 @@
-﻿
-using Repository.Models;
+﻿using Repository.Models;
 
 namespace Repository.Interfaces;
 
@@ -11,5 +10,7 @@ public interface IUserRepository
     Task<User?> GetFullUserByIdAsync(int id);
     Task<bool> UpdateUserAsync(User newUser);
     Task<bool> DeleteUserAsync(User user);
+    Task<User?> GetUserByEmailAndPassword(string email, string password);
+
     Task SaveChangesAsync();
 }
