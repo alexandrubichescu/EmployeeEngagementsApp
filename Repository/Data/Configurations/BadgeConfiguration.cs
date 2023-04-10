@@ -1,6 +1,7 @@
 ﻿using System.Reflection.Emit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Repository.Models;
 
 namespace Repository.Configurations;
@@ -18,5 +19,11 @@ public class BadgeConfiguration : IEntityTypeConfiguration<Badge>
         builder.Property(b => b.TokenReward);
 
         //builder.HasMany(x => x.Users);
+
+        builder.HasData(
+            new Badge { Id = 1, Name = "Team Player", Description = "Awarded for collaborating well with others" },
+            new Badge { Id = 2, Name = "Innovator", Description = "Awarded for contributing innovative ideas" },
+            new Badge { Id = 3, Name = "Top Performer", Description = "Awarded for exceptional performance" }
+        );
     }
 }

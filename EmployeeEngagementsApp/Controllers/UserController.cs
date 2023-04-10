@@ -85,7 +85,7 @@ public class UserController : ControllerBase
         return Ok();
     }
 
-    [HttpPost("{userId}/badges/badgeId")]
+    [HttpPost("{userId}/badges/{badgeId}")] 
     public async Task<ActionResult> AddBadge(int userId, int badgeId)
     {
         await _userService.AddUserBadgeAsync(userId, badgeId);

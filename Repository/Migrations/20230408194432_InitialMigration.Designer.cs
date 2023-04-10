@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Repository.Migrations
 {
     [DbContext(typeof(BlueDbContext))]
-    [Migration("20230408184850_AddBadgeEntity")]
-    partial class AddBadgeEntity
+    [Migration("20230408194432_InitialMigration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,7 +35,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("BadgeUser");
+                    b.ToTable("UserBadges", (string)null);
                 });
 
             modelBuilder.Entity("Repository.Models.Badge", b =>
@@ -65,6 +65,29 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Badges", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Awarded for collaborating well with others",
+                            Name = "Team Player",
+                            TokenReward = 0
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Awarded for contributing innovative ideas",
+                            Name = "Innovator",
+                            TokenReward = 0
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Awarded for exceptional performance",
+                            Name = "Top Performer",
+                            TokenReward = 0
+                        });
                 });
 
             modelBuilder.Entity("Repository.Models.User", b =>
@@ -103,21 +126,48 @@ namespace Repository.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
 
-            modelBuilder.Entity("Repository.Models.UserBadge", b =>
-                {
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("BadgeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserId", "BadgeId");
-
-                    b.HasIndex("BadgeId");
-
-                    b.ToTable("UserBadge");
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "johndoe@example.com",
+                            FirstName = "John",
+                            LastName = "Doe",
+                            Password = "password",
+                            Points = 0,
+                            Role = "Admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Email = "janesmith@example.com",
+                            FirstName = "Jane",
+                            LastName = "Smith",
+                            Password = "password",
+                            Points = 0,
+                            Role = "User"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "markjohnson@example.com",
+                            FirstName = "Mark",
+                            LastName = "Johnson",
+                            Password = "password",
+                            Points = 0,
+                            Role = "User"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Email = "sarahlee@example.com",
+                            FirstName = "Sarah",
+                            LastName = "Lee",
+                            Password = "password",
+                            Points = 0,
+                            Role = "User"
+                        });
                 });
 
             modelBuilder.Entity("BadgeUser", b =>
@@ -133,25 +183,6 @@ namespace Repository.Migrations
                         .HasForeignKey("UsersId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("Repository.Models.UserBadge", b =>
-                {
-                    b.HasOne("Repository.Models.Badge", "Badge")
-                        .WithMany()
-                        .HasForeignKey("BadgeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Repository.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Badge");
-
-                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

@@ -16,6 +16,5 @@ public class BlueDbContext : DbContext
     {
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new BadgeConfiguration());
-        modelBuilder.ApplyConfiguration(new UserBadgeConfiguration());
     }
 }

@@ -9,5 +9,5 @@ public class Badge
     public string? ImageUrl { get; set; }
     public int TokenReward { get; set; }
 
-    public List<User> Users { get; set; }
+    public List<User>? Users { get; set; }
 }

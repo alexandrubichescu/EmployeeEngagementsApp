@@ -28,6 +28,12 @@ public class UserRepository : IUserRepository
         var user = await _context.Users.FindAsync(userId);
         return user;
     }
+    public async Task<User?> GetFullUserByIdAsync(int userId)
+    {
+        var user = await _context.Users.Include(x => x.Badges).FirstOrDefaultAsync(x => x.Id == userId);
+        return user;
+    }
+
     public async Task<bool> UpdateUserAsync(User updatedUser)
     {
         _context.Users.Update(updatedUser);

@@ -30,7 +30,7 @@ public class UserService : IUserService
 
     public async Task AddUserBadgeAsync(int id, int badgeId)
     {
-        var user = await _userRepository.GetUserByIdAsync(id);
+        var user = await _userRepository.GetFullUserByIdAsync(id);
         var badge = await _badgeRepository.GetBadgeByIdAsync(badgeId);
 
         if (user == null)

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Reflection.Emit;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Repository.Models;
 
@@ -30,6 +31,47 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         user.Property(u => u.Points)
             .IsRequired();
 
-        //user.HasMany(u => u.Badges);
+        user.HasMany(u => u.Badges)
+            .WithMany(b => b.Users)
+            .UsingEntity(j => j.ToTable("UserBadges"));
+
+        user.HasData(
+            new User {
+                Id = 1,
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "johndoe@example.com",
+                Role = "Admin",
+                Password = "password",
+                Points = 0
+            },
+            new User {
+                Id = 2,
+                FirstName = "Jane",
+                LastName = "Smith",
+                Email = "janesmith@example.com",
+                Role = "User",
+                Password = "password",
+                Points = 0
+            },
+            new User {
+                Id = 3,
+                FirstName = "Mark",
+                LastName = "Johnson",
+                Email = "markjohnson@example.com",
+                Role = "User",
+                Password = "password",
+                Points = 0
+            },
+            new User {
+                Id = 4,
+                FirstName = "Sarah",
+                LastName = "Lee",
+                Email = "sarahlee@example.com",
+                Role = "User",
+                Password = "password",
+                Points = 0
+            }
+        );
     }
 }
