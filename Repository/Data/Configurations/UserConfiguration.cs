@@ -36,37 +36,37 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 Id = 1,
                 FirstName = "John",
                 LastName = "Doe",
-                Email = "johndoe@example.com",
-                Role = "Admin",
+                Email = "admin@test.com",
+                Role = Role.Admin,
                 Points = 0,
-                Password = "password"
+                PasswordHash = "123"
             },
             new User {
                 Id = 2,
                 FirstName = "Jane",
                 LastName = "Smith",
-                Email = "janesmith@example.com",
-                Role = "User",
+                Email = "user@test.com",
+                Role = Role.User,
                 Points = 0,
-                Password = "password"
+                PasswordHash = "123"
             },
             new User {
                 Id = 3,
                 FirstName = "Mark",
                 LastName = "Johnson",
                 Email = "markjohnson@example.com",
-                Role = "User",
+                Role = Role.User,
                 Points = 0,
-                Password = "password"
+                PasswordHash = "password"
             },
             new User {
                 Id = 4,
                 FirstName = "Sarah",
                 LastName = "Lee",
                 Email = "sarahlee@example.com",
-                Role = "User",
+                Role = Role.Admin,
                 Points = 0,
-                Password = "password"
+                PasswordHash = "password"
             }
         );
     }

@@ -17,16 +17,18 @@ public class UserService : IUserService
 {
     private readonly IMapper _mapper;
     private readonly IUserRepository _userRepository;
+    private readonly IJwtUtils _jwtUtils;
     private readonly IBadgeRepository _badgeRepository;
     private readonly AppSettings _appSettings;
 
     public UserService(IMapper mapper, IUserRepository userRepository,
-        IBadgeRepository badgeRepository, IOptions<AppSettings> appSettings)
+        IBadgeRepository badgeRepository, IOptions<AppSettings> appSettings, IJwtUtils jwtUtils)
     {
         _mapper = mapper;
         _userRepository = userRepository;
         _badgeRepository = badgeRepository;
         _appSettings = appSettings.Value;
+        _jwtUtils = jwtUtils;
     }
 
 
@@ -100,32 +102,13 @@ public class UserService : IUserService
     {
         var user = await _userRepository.GetUserByEmailAndPassword(model.Email, model.Password);
 
-        // return null if user not found
-        if (user == null)
-            throw new Exception("User not found");
+        if (user is null)
+            throw new Exception("Invalid user");
 
         // authentication successful so generate jwt token
-        var token = generateJwtToken(user);
+        var jwtToken = _jwtUtils.GenerateJwtToken(user);
 
-        return new AuthenticateResponse(user, token);
+        return new AuthenticateResponse(user, jwtToken);
     }
-
-
-
-    private string generateJwtToken(User user)
-    {
-        // generate token that is valid for 7 days
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-        var tokenDescriptor = new SecurityTokenDescriptor
-        {
-            Subject = new ClaimsIdentity(new[] { new Claim("id", user.Id.ToString()) }),
-            Expires = DateTime.UtcNow.AddDays(7),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-        };
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        return tokenHandler.WriteToken(token);
-    }
-
 
 }

@@ -158,16 +158,15 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Password")
+                    b.Property<string>("PasswordHash")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Points")
                         .HasColumnType("int");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -180,9 +179,9 @@ namespace Repository.Migrations
                             Email = "johndoe@example.com",
                             FirstName = "John",
                             LastName = "Doe",
-                            Password = "password",
+                            PasswordHash = "password",
                             Points = 0,
-                            Role = "Admin"
+                            Role = 0
                         },
                         new
                         {
@@ -190,9 +189,9 @@ namespace Repository.Migrations
                             Email = "janesmith@example.com",
                             FirstName = "Jane",
                             LastName = "Smith",
-                            Password = "password",
+                            PasswordHash = "password",
                             Points = 0,
-                            Role = "User"
+                            Role = 1
                         },
                         new
                         {
@@ -200,9 +199,9 @@ namespace Repository.Migrations
                             Email = "markjohnson@example.com",
                             FirstName = "Mark",
                             LastName = "Johnson",
-                            Password = "password",
+                            PasswordHash = "password",
                             Points = 0,
-                            Role = "User"
+                            Role = 1
                         },
                         new
                         {
@@ -210,9 +209,9 @@ namespace Repository.Migrations
                             Email = "sarahlee@example.com",
                             FirstName = "Sarah",
                             LastName = "Lee",
-                            Password = "password",
+                            PasswordHash = "password",
                             Points = 0,
-                            Role = "User"
+                            Role = 0
                         });
                 });
 

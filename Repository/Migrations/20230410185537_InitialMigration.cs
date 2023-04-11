@@ -29,6 +29,21 @@ namespace Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Quests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    Points = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Quests", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -37,8 +52,8 @@ namespace Repository.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Points = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -81,14 +96,24 @@ namespace Repository.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "Email", "FirstName", "LastName", "Password", "Points", "Role" },
+                table: "Quests",
+                columns: new[] { "Id", "Description", "Points", "Title" },
                 values: new object[,]
                 {
-                    { 1, "johndoe@example.com", "John", "Doe", "password", 0, "Admin" },
-                    { 2, "janesmith@example.com", "Jane", "Smith", "password", 0, "User" },
-                    { 3, "markjohnson@example.com", "Mark", "Johnson", "password", 0, "User" },
-                    { 4, "sarahlee@example.com", "Sarah", "Lee", "password", 0, "User" }
+                    { 1, "Complete 10 push-ups", 10, "Gym quest" },
+                    { 2, "Walk 10,000 steps", 20, "Maraton" },
+                    { 3, "Read a book for 1 hour", 15, "Brain training" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Email", "FirstName", "LastName", "PasswordHash", "Points", "Role" },
+                values: new object[,]
+                {
+                    { 1, "johndoe@example.com", "John", "Doe", "password", 0, 0 },
+                    { 2, "janesmith@example.com", "Jane", "Smith", "password", 0, 1 },
+                    { 3, "markjohnson@example.com", "Mark", "Johnson", "password", 0, 1 },
+                    { 4, "sarahlee@example.com", "Sarah", "Lee", "password", 0, 0 }
                 });
 
             migrationBuilder.CreateIndex(
@@ -100,6 +125,9 @@ namespace Repository.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Quests");
+
             migrationBuilder.DropTable(
                 name: "UserBadges");
 

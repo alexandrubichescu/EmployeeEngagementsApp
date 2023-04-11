@@ -8,10 +8,10 @@ public class User
     public string FirstName { get; set; } = default!;
     public string LastName { get; set; } = default!;
     public string Email { get; set; } = default!;
-    public string Role { get; set; } = default!;
+    public Role Role { get; set; }
 
     [JsonIgnore]
-    public string Password { get; set; } = default!;
+    public string PasswordHash { get; set; }
 
 
     /// <summary>

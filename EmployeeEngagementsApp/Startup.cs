@@ -33,6 +33,7 @@ public class StartUp
         services.AddScoped<IQuestRepository, QuestRepository>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IQuestService, QuestService>();
+        services.AddScoped<IJwtUtils, JwtUtils>();
 
         services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 

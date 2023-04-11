@@ -1,6 +1,6 @@
-using System.Data;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Repository.Models;
+using Services.Auth;
 using Services.DTO;
 using Services.Interfaces;
 
@@ -8,7 +8,7 @@ namespace EmployeeEngagementsApp.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-//[Authorize]
+[Authorize]
 public class UserController : ControllerBase
 {
     private readonly IUserService _userService;
@@ -18,6 +18,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet]
+    [Authorize(Role.Admin)]
     public async Task<ActionResult> GetAll()
     {
         var userList = await _userService.GetAllUsersAsync();
