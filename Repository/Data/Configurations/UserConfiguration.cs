@@ -39,7 +39,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 Email = "admin@test.com",
                 Role = Role.Admin,
                 Points = 0,
-                PasswordHash = "123"
+                Password = "123"
             },
             new User {
                 Id = 2,
@@ -48,7 +48,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 Email = "user@test.com",
                 Role = Role.User,
                 Points = 0,
-                PasswordHash = "123"
+                Password = "123"
             },
             new User {
                 Id = 3,
@@ -57,7 +57,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 Email = "markjohnson@example.com",
                 Role = Role.User,
                 Points = 0,
-                PasswordHash = "password"
+                Password = "password"
             },
             new User {
                 Id = 4,
@@ -66,7 +66,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 Email = "sarahlee@example.com",
                 Role = Role.Admin,
                 Points = 0,
-                PasswordHash = "password"
+                Password = "password"
             }
         );
     }

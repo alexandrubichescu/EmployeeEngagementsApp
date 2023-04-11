@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Repository.Interfaces;
 using Repository.Models;
@@ -53,5 +54,30 @@ public class QuestService : IQuestService
     {
         await _questRepository.DeleteQuestAsync(id);
     }
-   
+
+    public async Task ApproveQuest(int loggedUserId, int QuestId)
+    {
+        var Quest = await _questRepository.GetQuestByIdAsync(QuestId);
+
+        Quest.Status = QuestStatus.Approved;
+        Quest.ApprovedBy = loggedUserId;
+
+        await _questRepository.SaveChangesAsync();
+    }
+    public async Task RejectQuest(int loggedUserId, int QuestId)
+    {
+        var Quest = await _questRepository.GetQuestByIdAsync(QuestId);
+
+        Quest.Status = QuestStatus.Rejected;
+        Quest.ApprovedBy = loggedUserId;
+
+        await _questRepository.SaveChangesAsync();
+    }
+
+    public async Task<bool> IsUserQuest(int loggedUserId, int QuestId)
+    {
+        var Quest = await _questRepository.GetQuestByIdAsync(QuestId);
+
+        return Quest.CreatorId == loggedUserId;
+    }
 }

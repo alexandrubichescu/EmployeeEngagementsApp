@@ -11,7 +11,7 @@ public class User
     public Role Role { get; set; }
 
     [JsonIgnore]
-    public string PasswordHash { get; set; }
+    public string Password { get; set; }
 
 
     /// <summary>
@@ -20,12 +20,9 @@ public class User
     public int Points { get; set; }
 
     /// <summary>
-    /// User Won badges
+    /// User Won Badges
     /// </summary>
-    public List<Badge>? Badges { get; set; }
+    public List<Badge> Badges { get; set; } = new();
 
-    /// <summary>
-    /// User complete quests
-    /// </summary>
-    //public List<Quest>? Quests { get; set; }
+    //public List<UserQuest> Quests { get; set; } = new();
 }

@@ -11,4 +11,5 @@ public interface IBadgeRepository
     Task<bool> UpdateBadgeAsync(Badge newBadge);
     Task<bool> DeleteBadgeAsync(Badge Badge);
     Task SaveChangesAsync();
+    Task<List<Badge>> GetBadgesByPointsAsync(int currentUserPoints);
 }

@@ -1,5 +1,4 @@
-﻿using Repository.Models;
-using Services.DTO;
+﻿using Services.DTO;
 
 namespace Services.Interfaces;
 
@@ -10,4 +9,7 @@ public interface IQuestService
     Task CreateQuestAsync(QuestDTO quest);
     Task UpdateQuestAsync(int id, QuestDTO quest);
     Task DeleteQuestAsync(int id);
+    Task ApproveQuest(int loggedUserId, int questId);
+    Task RejectQuest(int loggedUserId, int questId);
+    Task<bool> IsUserQuest(int loggedUserId, int questId);
 }

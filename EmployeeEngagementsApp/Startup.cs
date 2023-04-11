@@ -21,18 +21,21 @@ public class StartUp
     public void ConfigureServices(IServiceCollection services)
     {
         services.AddControllers();
-        
-        
 
         // Add Entity Framework Core
         services.AddDbContext<BlueDbContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("BlueDbConnection")));
 
         services.AddScoped<IUserRepository, UserRepository>();
-        services.AddScoped<IBadgeRepository, BadgeRepository>();
         services.AddScoped<IQuestRepository, QuestRepository>();
+        services.AddScoped<IBadgeRepository, BadgeRepository>();
+        services.AddScoped<IUserQuestRepository, UserQuestRepository>();
+
         services.AddScoped<IUserService, UserService>();
+        services.AddScoped<IBadgeService, BadgeService>();
         services.AddScoped<IQuestService, QuestService>();
+        services.AddScoped<IUserQuestService, UserQuestService>();
+
         services.AddScoped<IJwtUtils, JwtUtils>();
 
         services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));

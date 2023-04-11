@@ -14,7 +14,7 @@ public class BadgeConfiguration : IEntityTypeConfiguration<Badge>
         builder.Property(b => b.Name).IsRequired().HasMaxLength(50);
         builder.Property(b => b.Description).HasMaxLength(500);
         builder.Property(b => b.ImageUrl).HasMaxLength(100);
-        builder.Property(b => b.TokenReward);
+        builder.Property(b => b.RequiredPoints);
 
         //builder.HasMany(x => x.Users);
 

@@ -19,15 +19,13 @@ public class UserService : IUserService
     private readonly IUserRepository _userRepository;
     private readonly IJwtUtils _jwtUtils;
     private readonly IBadgeRepository _badgeRepository;
-    private readonly AppSettings _appSettings;
 
     public UserService(IMapper mapper, IUserRepository userRepository,
-        IBadgeRepository badgeRepository, IOptions<AppSettings> appSettings, IJwtUtils jwtUtils)
+        IBadgeRepository badgeRepository, IJwtUtils jwtUtils)
     {
         _mapper = mapper;
         _userRepository = userRepository;
         _badgeRepository = badgeRepository;
-        _appSettings = appSettings.Value;
         _jwtUtils = jwtUtils;
     }
 

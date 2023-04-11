@@ -7,7 +7,7 @@
 namespace Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class AddEntities : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,7 +21,7 @@ namespace Repository.Migrations
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     ImageUrl = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    TokenReward = table.Column<int>(type: "int", nullable: false)
+                    RequiredPoints = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -36,11 +36,31 @@ namespace Repository.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
-                    Points = table.Column<int>(type: "int", nullable: false)
+                    Points = table.Column<int>(type: "int", nullable: false),
+                    CreatorId = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    ApprovedBy = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Quests", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserQuests",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    QuestId = table.Column<int>(type: "int", nullable: false),
+                    Comments = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ProofOfCompletion = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserQuests", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -53,7 +73,7 @@ namespace Repository.Migrations
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
                     Role = table.Column<int>(type: "int", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Points = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -87,7 +107,7 @@ namespace Repository.Migrations
 
             migrationBuilder.InsertData(
                 table: "Badges",
-                columns: new[] { "Id", "Description", "ImageUrl", "Name", "TokenReward" },
+                columns: new[] { "Id", "Description", "ImageUrl", "Name", "RequiredPoints" },
                 values: new object[,]
                 {
                     { 1, "Awarded for collaborating well with others", null, "Team Player", 0 },
@@ -97,21 +117,21 @@ namespace Repository.Migrations
 
             migrationBuilder.InsertData(
                 table: "Quests",
-                columns: new[] { "Id", "Description", "Points", "Title" },
+                columns: new[] { "Id", "ApprovedBy", "CreatorId", "Description", "Points", "Status", "Title" },
                 values: new object[,]
                 {
-                    { 1, "Complete 10 push-ups", 10, "Gym quest" },
-                    { 2, "Walk 10,000 steps", 20, "Maraton" },
-                    { 3, "Read a book for 1 hour", 15, "Brain training" }
+                    { 1, 1, 2, "Complete 10 push-ups", 50, 0, "Gym Quest" },
+                    { 2, 1, 2, "Walk 10,000 steps", 50, 0, "Maraton" },
+                    { 3, 1, 3, "Read a book for 1 hour", 50, 1, "Brain training" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Email", "FirstName", "LastName", "PasswordHash", "Points", "Role" },
+                columns: new[] { "Id", "Email", "FirstName", "LastName", "Password", "Points", "Role" },
                 values: new object[,]
                 {
-                    { 1, "johndoe@example.com", "John", "Doe", "password", 0, 0 },
-                    { 2, "janesmith@example.com", "Jane", "Smith", "password", 0, 1 },
+                    { 1, "admin@test.com", "John", "Doe", "123", 0, 0 },
+                    { 2, "user@test.com", "Jane", "Smith", "123", 0, 1 },
                     { 3, "markjohnson@example.com", "Mark", "Johnson", "password", 0, 1 },
                     { 4, "sarahlee@example.com", "Sarah", "Lee", "password", 0, 0 }
                 });
@@ -130,6 +150,9 @@ namespace Repository.Migrations
 
             migrationBuilder.DropTable(
                 name: "UserBadges");
+
+            migrationBuilder.DropTable(
+                name: "UserQuests");
 
             migrationBuilder.DropTable(
                 name: "Badges");

@@ -20,13 +20,13 @@ public class BadgeRepository : IBadgeRepository
     }
     public async Task<List<Badge>> GetAllBadgesAsync()
     {
-        var Badges = await _context.Badges.ToListAsync();
-        return Badges;
+        var badges = await _context.Badges.ToListAsync();
+        return badges;
     }
     public async Task<Badge?> GetBadgeByIdAsync(int BadgeId)
     {
-        var Badge = await _context.Badges.FindAsync(BadgeId);
-        return Badge;
+        var badge = await _context.Badges.FindAsync(BadgeId);
+        return badge;
     }
     public async Task<bool> UpdateBadgeAsync(Badge updatedBadge)
     {
@@ -44,6 +44,11 @@ public class BadgeRepository : IBadgeRepository
     public async Task SaveChangesAsync()
     {
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<List<Badge>> GetBadgesByPointsAsync(int currentUserPoints)
+    {
+        return await _context.Badges.Where(x => x.RequiredPoints <= currentUserPoints).ToListAsync();
     }
 }
 

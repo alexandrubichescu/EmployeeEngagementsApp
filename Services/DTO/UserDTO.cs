@@ -14,7 +14,7 @@ public class UserDTO
     public int Points { get; set; }
 
     /// <summary>
-    /// User Won badges
+    /// User Won Quests
     /// </summary>
-    //public List<Badge> Badges { get; set; }
+    //public List<Quest> Quests { get; set; }
 }

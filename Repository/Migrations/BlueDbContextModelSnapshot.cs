@@ -56,7 +56,7 @@ namespace Repository.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("TokenReward")
+                    b.Property<int>("RequiredPoints")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -69,21 +69,21 @@ namespace Repository.Migrations
                             Id = 1,
                             Description = "Awarded for collaborating well with others",
                             Name = "Team Player",
-                            TokenReward = 0
+                            RequiredPoints = 0
                         },
                         new
                         {
                             Id = 2,
                             Description = "Awarded for contributing innovative ideas",
                             Name = "Innovator",
-                            TokenReward = 0
+                            RequiredPoints = 0
                         },
                         new
                         {
                             Id = 3,
                             Description = "Awarded for exceptional performance",
                             Name = "Top Performer",
-                            TokenReward = 0
+                            RequiredPoints = 0
                         });
                 });
 
@@ -95,12 +95,21 @@ namespace Repository.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ApprovedBy")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CreatorId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("Points")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -116,22 +125,31 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
+                            ApprovedBy = 1,
+                            CreatorId = 2,
                             Description = "Complete 10 push-ups",
-                            Points = 10,
-                            Title = "Gym quest"
+                            Points = 50,
+                            Status = 0,
+                            Title = "Gym Quest"
                         },
                         new
                         {
                             Id = 2,
+                            ApprovedBy = 1,
+                            CreatorId = 2,
                             Description = "Walk 10,000 steps",
-                            Points = 20,
+                            Points = 50,
+                            Status = 0,
                             Title = "Maraton"
                         },
                         new
                         {
                             Id = 3,
+                            ApprovedBy = 1,
+                            CreatorId = 3,
                             Description = "Read a book for 1 hour",
-                            Points = 15,
+                            Points = 50,
+                            Status = 1,
                             Title = "Brain training"
                         });
                 });
@@ -158,7 +176,7 @@ namespace Repository.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PasswordHash")
+                    b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -176,20 +194,20 @@ namespace Repository.Migrations
                         new
                         {
                             Id = 1,
-                            Email = "johndoe@example.com",
+                            Email = "admin@test.com",
                             FirstName = "John",
                             LastName = "Doe",
-                            PasswordHash = "password",
+                            Password = "123",
                             Points = 0,
                             Role = 0
                         },
                         new
                         {
                             Id = 2,
-                            Email = "janesmith@example.com",
+                            Email = "user@test.com",
                             FirstName = "Jane",
                             LastName = "Smith",
-                            PasswordHash = "password",
+                            Password = "123",
                             Points = 0,
                             Role = 1
                         },
@@ -199,7 +217,7 @@ namespace Repository.Migrations
                             Email = "markjohnson@example.com",
                             FirstName = "Mark",
                             LastName = "Johnson",
-                            PasswordHash = "password",
+                            Password = "password",
                             Points = 0,
                             Role = 1
                         },
@@ -209,10 +227,39 @@ namespace Repository.Migrations
                             Email = "sarahlee@example.com",
                             FirstName = "Sarah",
                             LastName = "Lee",
-                            PasswordHash = "password",
+                            Password = "password",
                             Points = 0,
                             Role = 0
                         });
+                });
+
+            modelBuilder.Entity("Repository.Models.UserQuest", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Comments")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ProofOfCompletion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("QuestId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserQuests");
                 });
 
             modelBuilder.Entity("BadgeUser", b =>

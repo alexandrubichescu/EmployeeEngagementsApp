@@ -26,6 +26,7 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("{id}")]
+    [Authorize(Role.Admin)]
     public async Task<IActionResult> GetById(int id)
     {
         var user = await _userService.GetUserByIdAsync(id);
@@ -68,6 +69,7 @@ public class UserController : ControllerBase
     }
 
     [HttpDelete("{id}")]
+    [Authorize(Role.Admin)]
     public async Task<IActionResult> DeleteUser([FromRoute] int id)
     {
         var succes = await _userService.DeleteUserAsync(id);
@@ -82,17 +84,10 @@ public class UserController : ControllerBase
     }
 
     [HttpPost("{id}/points")]
+    [Authorize(Role.Admin)]
     public async Task<ActionResult> AddPoints(int id, [FromBody] int points)
     {
         await _userService.AddUserPointsAsync(id, points);
-        return Ok();
-    }
-
-    [HttpPost("{userId}/badges/{badgeId}")] 
-    public async Task<ActionResult> AddBadge(int userId, int badgeId)
-    {
-        await _userService.AddUserBadgeAsync(userId, badgeId);
-
         return Ok();
     }
 

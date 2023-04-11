@@ -9,4 +9,5 @@ public interface IQuestRepository
     Task CreateQuestAsync(Quest quest);
     Task UpdateQuestAsync(Quest quest);
     Task DeleteQuestAsync(int id);
+    Task SaveChangesAsync();
 }
