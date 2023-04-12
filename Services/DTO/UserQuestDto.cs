@@ -1,6 +1,6 @@
 ﻿namespace Services.DTO;
 
-public class UserQuestDto
+public class UserQuestDTO
 {
     public int QuestTitle { get; set; }
     public string? Comments { get; set; }

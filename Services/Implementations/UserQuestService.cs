@@ -1,7 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Repository.Implementations;
 using Repository.Interfaces;
 using Repository.Models;
 using Services.DTO;
@@ -11,26 +8,29 @@ namespace Services.Implementations;
 
 public class UserQuestService : IUserQuestService
 {
-    private readonly IQuestRepository _QuestRepository;
+    private readonly IQuestRepository _questRepository;
     private readonly IUserQuestRepository _userQuestRepository;
     private readonly IUserRepository _userRepository;
     private readonly IBadgeService _badgeService;
+    private readonly IMapper _mapper;
 
     public UserQuestService(
-        IQuestRepository QuestRepository, 
-        IUserQuestRepository userQuestRepository, 
+        IQuestRepository questRepository,
+        IUserQuestRepository userQuestRepository,
         IUserRepository userRepository,
-        IBadgeService badgeService)
+        IBadgeService badgeService,
+        IMapper mapper = null)
     {
-        _QuestRepository = QuestRepository;
+        _questRepository = questRepository;
         _userQuestRepository = userQuestRepository;
         _userRepository = userRepository;
         _badgeService = badgeService;
+        _mapper = mapper;
     }
 
     public async Task CompleteUserQuest(int loggedUserId, AddUserQuestDto userQuestDto)
     {
-        var existingQuest = await _QuestRepository.GetQuestByIdAsync(userQuestDto.QuestId);
+        var existingQuest = await _questRepository.GetQuestByIdAsync(userQuestDto.QuestId);
         if (existingQuest == null)
             throw new Exception($"Quest with id {userQuestDto.QuestId} not found.");
 
@@ -50,35 +50,20 @@ public class UserQuestService : IUserQuestService
         user!.Points += existingQuest.Points;
         
         // check if user should receive a Badge
-        var latestBadges = await _badgeService.GetLatestUserBadges(user, user.Points);
+        var latestBadges = await _badgeService.GetLatestUserBadgesAsync(user, user.Points);
         if (latestBadges.Count > 0)
             user.Badges.AddRange(latestBadges);
 
         await _userRepository.SaveChangesAsync();
     }
 
-
-    public Task<UserQuestDto> GetUserQuestAsync(int loggedUserId, int QuestId)
+    public async Task<IEnumerable<UserQuestDTO>> GetUserCompletedQuestsAsync(int loggedUserId)
     {
-        throw new NotImplementedException();
+        var quests = await _userQuestRepository.GetUserCompletedQuestsAsync(loggedUserId);
+
+        return _mapper.Map<IEnumerable<UserQuestDTO>>(quests);
+                
     }
 
-    public async Task<IEnumerable<UserQuestDto>> GetUserCompletedQuestsAsync(int loggedUserId)
-    {
-        var Quests = await _userQuestRepository.GetUserCompletedQuestsAsync(loggedUserId);
-
-        // mapper to userQuests to UserQuestDto
-        throw new NotImplementedException();
-    }
-
-    public Task DeleteUserQuest(int loggedUserId, int QuestId)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task UpdateUserQuest(AddUserQuestDto userQuest)
-    {
-        throw new NotImplementedException();
-    }
 
 }

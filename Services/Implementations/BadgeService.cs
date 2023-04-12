@@ -13,7 +13,7 @@ public class BadgeService : IBadgeService
         _badgeRepository = badgeRepository;
     }
 
-    public async Task<List<Badge>> GetLatestUserBadges(User user, int currentUserPoints)
+    public async Task<List<Badge>> GetLatestUserBadgesAsync(User user, int currentUserPoints)
     {
         var userBadgeIds = user.Badges?.Select(x => x.Id).ToList();
 

@@ -1,7 +1,5 @@
 ﻿using Repository.Models;
 
-namespace Services.Auth;
-
 public class AuthenticateResponse
 {
     public int Id { get; set; }
@@ -10,7 +8,6 @@ public class AuthenticateResponse
     public string Email { get; set; }
     public string Token { get; set; }
     public Role Role { get; set; }
-
 
     public AuthenticateResponse(User user, string token)
     {

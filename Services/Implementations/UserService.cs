@@ -1,10 +1,5 @@
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using AutoMapper;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
 using Repository.Interfaces;
 using Repository.Models;
 using Services.Auth;
@@ -30,7 +25,7 @@ public class UserService : IUserService
     }
 
 
-    public async Task<int> AddUserAsync(UserDTO UserDTO)
+    public async Task<int> AddUserAsync(AddUserDTO UserDTO)
     {
         var user = _mapper.Map<User>(UserDTO);
         await _userRepository.AddUserAsync(user);
@@ -76,26 +71,32 @@ public class UserService : IUserService
             return false;
     }
 
-    public async Task<List<UserDTO>> GetAllUsersAsync()
+    public async Task<List<UpdateUserDTO>> GetAllUsersAsync()
     {
-        return _mapper.Map<List<UserDTO>>(await _userRepository.GetAllUsersAsync());
+        return _mapper.Map<List<UpdateUserDTO>>(await _userRepository.GetAllUsersAsync());
     }
 
-    public async Task<UserDTO> GetUserByIdAsync(int id)
+    public async Task<UpdateUserDTO> GetUserByIdAsync(int id)
     {
-        return _mapper.Map<UserDTO>(await _userRepository.GetUserByIdAsync(id));
+        return _mapper.Map<UpdateUserDTO>(await _userRepository.GetUserByIdAsync(id));
     }
 
-    public async Task<bool> UpdateUserAsync(UserDTO UserDTO)
+    public async Task UpdateUserAsync(UpdateUserDTO userDTO)
     {
-        var user = await _userRepository.GetUserByIdAsync(UserDTO.Id);
-        if (user != null)
-        {
-            user = _mapper.Map(UserDTO, user);
-            return await _userRepository.UpdateUserAsync(user);
-        }
-        return false;
+        var user = await _userRepository.GetUserByIdAsync(userDTO.Id);
+        if (user == null)
+            throw new Exception("User could not be found");
+
+        user.Email = userDTO.Email;
+        user.FirstName = userDTO.FirstName;
+        user.Points = userDTO.Points;
+        user.LastName = userDTO.LastName;
+        user.Role = userDTO.Role;
+        user.Password = userDTO.Password;
+
+        await _userRepository.SaveChangesAsync();
     }
+
     public async Task<AuthenticateResponse> Authenticate(AuthenticateRequest model)
     {
         var user = await _userRepository.GetUserByEmailAndPassword(model.Email, model.Password);

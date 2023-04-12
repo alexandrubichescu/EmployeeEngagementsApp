@@ -1,8 +1,5 @@
-using System.Data;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Auth;
-using Services.DTO;
 using Services.Interfaces;
 
 namespace EmployeeEngagementsApp.Controllers;

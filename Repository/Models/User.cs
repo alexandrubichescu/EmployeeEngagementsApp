@@ -9,10 +9,8 @@ public class User
     public string LastName { get; set; } = default!;
     public string Email { get; set; } = default!;
     public Role Role { get; set; }
-
     [JsonIgnore]
-    public string Password { get; set; }
-
+    public string Password { get; set; }=default!;
 
     /// <summary>
     /// User points
@@ -23,6 +21,4 @@ public class User
     /// User Won Badges
     /// </summary>
     public List<Badge> Badges { get; set; } = new();
-
-    //public List<UserQuest> Quests { get; set; } = new();
 }

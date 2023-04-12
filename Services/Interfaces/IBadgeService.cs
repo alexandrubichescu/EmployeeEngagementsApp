@@ -4,5 +4,5 @@ namespace Services.Interfaces;
 
 public interface IBadgeService
 {
-    Task<List<Badge>> GetLatestUserBadges(User user, int currentUserPoints);
+    Task<List<Badge>> GetLatestUserBadgesAsync(User user, int currentUserPoints);
 }

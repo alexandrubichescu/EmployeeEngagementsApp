@@ -18,14 +18,14 @@ public class UserQuestRepository : IUserQuestRepository
         return await _dbContext.UserQuests.Where(x => x.UserId == loggedUserId).ToListAsync();
     }
 
-    public async Task<UserQuest> GetUserQuestByUserIdAndQuestIdAsync(int loggedUserId, int QuestId)
+    public async Task<UserQuest> GetUserQuestByUserIdAndQuestIdAsync(int loggedUserId, int questId)
     {
-        var Quest = await _dbContext.UserQuests.FirstOrDefaultAsync(q => q.UserId == loggedUserId && q.QuestId == QuestId);
-        if (Quest == null)
+        var quest = await _dbContext.UserQuests.FirstOrDefaultAsync(q => q.UserId == loggedUserId && q.QuestId == questId);
+        if (quest == null)
         {
             throw new Exception("UserQuest not found");
         }
-        return Quest;
+        return quest;
     }
 
     public async Task DeleteUserQuest(UserQuest userQuest)

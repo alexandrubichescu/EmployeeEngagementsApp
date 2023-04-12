@@ -34,12 +34,6 @@ public class UserRepository : IUserRepository
         return user;
     }
 
-    public async Task<bool> UpdateUserAsync(User updatedUser)
-    {
-        _context.Users.Update(updatedUser);
-        await _context.SaveChangesAsync();
-        return true;
-    }
     public async Task<bool> DeleteUserAsync(User user)
     {
         _context.Users.Remove(user);

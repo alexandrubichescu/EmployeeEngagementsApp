@@ -1,13 +1,12 @@
 ﻿
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Repository.Models;
 using Services.Auth;
 using Services.Interfaces;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
-using System;
 
 namespace Services.Implementations;
 
@@ -60,7 +59,7 @@ public class JwtUtils : IJwtUtils
             // return user id from JWT token if validation successful
             return userId;
         }
-        catch(Exception ex)
+        catch (Exception)
         {
             // return null if validation fails
             return null;

@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Repository.Interfaces;
 using Repository.Models;
 using Services.DTO;
@@ -19,35 +17,36 @@ public class QuestService : IQuestService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<QuestDTO>> GetAllQuestsAsync()
+    public async Task<IEnumerable<UpdateQuestDTO>> GetAllQuestsAsync()
     {
         var quests = await _questRepository.GetAllQuestsAsync();
-        return _mapper.Map<IEnumerable<QuestDTO>>(quests);
+        return _mapper.Map<IEnumerable<UpdateQuestDTO>>(quests);
     }
 
-    public async Task<QuestDTO> GetQuestByIdAsync(int id)
+    public async Task<UpdateQuestDTO> GetQuestByIdAsync(int id)
     {
         var quest = await _questRepository.GetQuestByIdAsync(id);
-        return _mapper.Map<QuestDTO>(quest);
+        return _mapper.Map<UpdateQuestDTO>(quest);
     }
 
-    public async Task CreateQuestAsync(QuestDTO quest)
+    public async Task CreateQuestAsync(AddQuestDTO quest)
     {
         var newQuest = _mapper.Map<Quest>(quest);
         await _questRepository.CreateQuestAsync(newQuest);
     }
 
-    public async Task UpdateQuestAsync(int id, QuestDTO quest)
+    public async Task UpdateQuestAsync(UpdateQuestDTO quest)
     {
-        var existingQuest = await _questRepository.GetQuestByIdAsync(id);
+        var existingQuest = await _questRepository.GetQuestByIdAsync(quest.Id);
+        
         if (existingQuest == null)
-        {
-            throw new ArgumentException($"Quest with id {id} not found.");
-        }
+            throw new ArgumentException($"Quest with id {quest.Id} not found.");
 
-        var updatedQuest = _mapper.Map<Quest>(quest);
-        updatedQuest.Id = id;
-        await _questRepository.UpdateQuestAsync(updatedQuest);
+        existingQuest.Title = quest.Title;  
+        existingQuest.Description = quest.Description;  
+        existingQuest.Points = quest.Points;  
+
+        await _questRepository.SaveChangesAsync();
     }
 
     public async Task DeleteQuestAsync(int id)
@@ -55,29 +54,29 @@ public class QuestService : IQuestService
         await _questRepository.DeleteQuestAsync(id);
     }
 
-    public async Task ApproveQuest(int loggedUserId, int QuestId)
+    public async Task ApproveQuest(int loggedUserId, int questId)
     {
-        var Quest = await _questRepository.GetQuestByIdAsync(QuestId);
+        var quest = await _questRepository.GetQuestByIdAsync(questId);
 
-        Quest.Status = QuestStatus.Approved;
-        Quest.ApprovedBy = loggedUserId;
+        quest.Status = QuestStatus.Approved;
+        quest.ApprovedBy = loggedUserId;
 
         await _questRepository.SaveChangesAsync();
     }
-    public async Task RejectQuest(int loggedUserId, int QuestId)
+    public async Task RejectQuest(int loggedUserId, int questId)
     {
-        var Quest = await _questRepository.GetQuestByIdAsync(QuestId);
+        var quest = await _questRepository.GetQuestByIdAsync(questId);
 
-        Quest.Status = QuestStatus.Rejected;
-        Quest.ApprovedBy = loggedUserId;
+        quest.Status = QuestStatus.Rejected;
+        quest.ApprovedBy = loggedUserId;
 
         await _questRepository.SaveChangesAsync();
     }
 
-    public async Task<bool> IsUserQuest(int loggedUserId, int QuestId)
+    public async Task<bool> IsUserQuest(int loggedUserId, int questId)
     {
-        var Quest = await _questRepository.GetQuestByIdAsync(QuestId);
+        var quest = await _questRepository.GetQuestByIdAsync(questId);
 
-        return Quest.CreatorId == loggedUserId;
+        return quest.CreatorId == loggedUserId;
     }
 }

@@ -4,7 +4,7 @@ namespace Repository.Interfaces;
 
 public interface IUserQuestRepository
 {
-    Task<UserQuest> GetUserQuestByUserIdAndQuestIdAsync(int loggedUserId, int QuestId);
+    Task<UserQuest> GetUserQuestByUserIdAndQuestIdAsync(int loggedUserId, int questId);
     Task<IEnumerable<UserQuest>> GetUserCompletedQuestsAsync(int loggedUserId);
 
     Task DeleteUserQuest(UserQuest userQuest);

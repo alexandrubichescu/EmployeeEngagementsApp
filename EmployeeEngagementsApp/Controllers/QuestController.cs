@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Repository.Models;
 using Services.Auth;
 using Services.DTO;
@@ -12,54 +11,54 @@ namespace EmployeeEngagementsApp.Controllers;
 [Authorize]
 public class QuestController : ControllerBase
 {
-    private readonly IQuestService _QuestService;
+    private readonly IQuestService _questService;
 
-    public QuestController(IQuestService QuestService)
+    public QuestController(IQuestService questService)
     {
-        _QuestService = QuestService;
+        _questService = questService;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAllQuests()
     {
-        var QuestDTOs = await _QuestService.GetAllQuestsAsync();
-        return Ok(QuestDTOs);
+        var questDTOs = await _questService.GetAllQuestsAsync();
+        return Ok(questDTOs);
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> GetQuestById(int id)
     {
-        var QuestDTO = await _QuestService.GetQuestByIdAsync(id);
+        var questDTO = await _questService.GetQuestByIdAsync(id);
 
-        if (QuestDTO == null)
+        if (questDTO == null)
         {
             return NotFound();
         }
 
-        return Ok(QuestDTO);
+        return Ok(questDTO);
     }
 
     [HttpPost("add")]
-    public async Task<IActionResult> AddQuest([FromBody] QuestDTO QuestDTO)
+    public async Task<IActionResult> AddQuest([FromBody] AddQuestDTO questDTO)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
-        await _QuestService.CreateQuestAsync(QuestDTO);
+        await _questService.CreateQuestAsync(questDTO);
 
         return Ok();
     }
 
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateQuest(int id,[FromBody] QuestDTO QuestDTO)
+    [HttpPatch]
+    public async Task<IActionResult> UpdateQuest([FromBody] UpdateQuestDTO questDTO)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest(ModelState);
         }
 
-        await _QuestService.UpdateQuestAsync(id, QuestDTO);
+        await _questService.UpdateQuestAsync(questDTO);
 
         return Ok();
     }
@@ -67,32 +66,32 @@ public class QuestController : ControllerBase
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteQuest(int id)
     {
-        // only admins and users who have created the Quest can delete Quests
+        // only admins and users who have created the quest can delete quests
         var currentUser = (User?)HttpContext.Items["User"];
 
-        var isUserQuest = await _QuestService.IsUserQuest(currentUser.Id, id);
+        var isUserQuest = await _questService.IsUserQuest(currentUser!.Id, id);
 
         if (currentUser?.Role != Role.Admin && !isUserQuest)
             return Unauthorized(new { message = "Unauthorized" });
 
-        await _QuestService.DeleteQuestAsync(id);
+        await _questService.DeleteQuestAsync(id);
 
         return Ok();
     }
 
-    [HttpPost("aprove")]
+    [HttpPost("aprove/{id}")]
     [Authorize(Role.Admin)]
     public async Task<IActionResult> ApproveQuest(int id)
     {
         var currentUser = (User?)HttpContext.Items["User"];
         if (currentUser == null)
             return BadRequest(ModelState);
-        await _QuestService.ApproveQuest(currentUser.Id, id);
+        await _questService.ApproveQuest(currentUser.Id, id);
 
         return Ok();
     }
    
-    [HttpPost("reject")]
+    [HttpPost("reject/{id}")]
     [Authorize(Role.Admin)]
     public async Task<IActionResult> RejectQuest(int id)
     {
@@ -100,7 +99,7 @@ public class QuestController : ControllerBase
         
         if(currentUser==null) 
             return BadRequest(ModelState);
-        await _QuestService.RejectQuest(currentUser.Id, id);
+        await _questService.RejectQuest(currentUser.Id, id);
 
         return Ok();
     }

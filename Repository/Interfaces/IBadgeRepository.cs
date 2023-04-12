@@ -9,7 +9,7 @@ public interface IBadgeRepository
     Task<List<Badge>> GetAllBadgesAsync();
     Task<Badge?> GetBadgeByIdAsync(int id);
     Task<bool> UpdateBadgeAsync(Badge newBadge);
-    Task<bool> DeleteBadgeAsync(Badge Badge);
+    Task<bool> DeleteBadgeAsync(Badge badge);
     Task SaveChangesAsync();
     Task<List<Badge>> GetBadgesByPointsAsync(int currentUserPoints);
 }

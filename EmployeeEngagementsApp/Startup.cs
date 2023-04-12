@@ -80,7 +80,5 @@ public class StartUp
             endpoints.MapControllers();
         });
 
-        // Run migrations on startup
-        //dbContext.Database.Migrate();
     }
 }

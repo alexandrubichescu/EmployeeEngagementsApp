@@ -34,12 +34,6 @@ public class QuestRepository : IQuestRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task UpdateQuestAsync(Quest quest)
-    {
-        _dbContext.Quests.Update(quest);
-        await _dbContext.SaveChangesAsync();
-    }
-
     public async Task DeleteQuestAsync(int id)
     {
         var quest = await GetQuestByIdAsync(id);

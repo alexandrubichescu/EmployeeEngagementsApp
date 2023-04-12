@@ -25,6 +25,16 @@ public class UserController : ControllerBase
         return Ok(userList);
     }
 
+    [HttpGet("ranking")]
+    [Authorize(Role.Admin)]
+    public async Task<ActionResult> GetAllSortedByPoints()
+    {
+        var userList = await _userService.GetAllUsersAsync();
+        userList = userList.OrderByDescending(u => u.Points).ToList();
+        return Ok(userList);
+    }
+
+
     [HttpGet("{id}")]
     [Authorize(Role.Admin)]
     public async Task<IActionResult> GetById(int id)
@@ -41,9 +51,10 @@ public class UserController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateUser([FromBody] UserDTO UserDTO)
+    [Authorize(Role.Admin)]
+    public async Task<IActionResult> CreateUser([FromBody] AddUserDTO userDTO)
     {
-        var userId = await _userService.AddUserAsync(UserDTO);
+        var userId = await _userService.AddUserAsync(userDTO);
         if (ModelState.IsValid)
         {
             return Ok(userId);
@@ -54,18 +65,13 @@ public class UserController : ControllerBase
         }
     }
 
-    [HttpPatch("{id}")]
-    public async Task<IActionResult> UpdateUser([FromBody] UserDTO UserDTO)
+    [HttpPut]
+    [Authorize(Role.Admin)]
+    public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDTO userDTO)
     {
-        var succes = await _userService.UpdateUserAsync(UserDTO);
-        if (succes)
-        {
-            return Ok();
-        }
-        else
-        {
-            return NotFound();
-        }
+        await _userService.UpdateUserAsync(userDTO);
+
+        return Ok();
     }
 
     [HttpDelete("{id}")]
@@ -90,6 +96,5 @@ public class UserController : ControllerBase
         await _userService.AddUserPointsAsync(id, points);
         return Ok();
     }
-
 }
 

@@ -23,9 +23,9 @@ public class BadgeRepository : IBadgeRepository
         var badges = await _context.Badges.ToListAsync();
         return badges;
     }
-    public async Task<Badge?> GetBadgeByIdAsync(int BadgeId)
+    public async Task<Badge?> GetBadgeByIdAsync(int badgeId)
     {
-        var badge = await _context.Badges.FindAsync(BadgeId);
+        var badge = await _context.Badges.FindAsync(badgeId);
         return badge;
     }
     public async Task<bool> UpdateBadgeAsync(Badge updatedBadge)
@@ -34,9 +34,9 @@ public class BadgeRepository : IBadgeRepository
         await _context.SaveChangesAsync();
         return true;
     }
-    public async Task<bool> DeleteBadgeAsync(Badge Badge)
+    public async Task<bool> DeleteBadgeAsync(Badge badge)
     {
-        _context.Badges.Remove(Badge);
+        _context.Badges.Remove(badge);
         await _context.SaveChangesAsync();
         return true;
     }
