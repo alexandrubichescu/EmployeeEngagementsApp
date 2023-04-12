@@ -3,7 +3,7 @@
 
 Sistemul de gamification oferă utilizatorilor un mediu virtual în care să își îndeplinească sarcinile și să câștige recompense pentru activitățile lor. Aplicația ar trebui să ofere o experiență interactivă și distractivă, astfel încât utilizatorii să își dorească să participe în mod regulat. 
 
-##Funcționalități care sunt incluse în aplicație la acest moment sunt:
+## Funcționalități care sunt incluse în aplicație la acest moment sunt:
 
 ### 1.	Utilizatori
 
